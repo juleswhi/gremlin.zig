@@ -6,7 +6,7 @@ A zero-dependency Protocol Buffers implementation in pure Zig (no protoc require
 
 Single command setup:
 ```bash
-zig fetch --save https://github.com/octopus-foundation/gremlin.zig/archive/refs/tags/v0.0.0.tar.gz
+zig fetch --save https://github.com/octopus-foundation/gremlin.zig/archive/refs/tags/0.0.0.tar.gz
 ```
 
 This command will:
