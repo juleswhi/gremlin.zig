@@ -1,0 +1,15 @@
+.{
+    .name = "integration-test",
+    .version = "0.0.0",
+
+    .paths = .{
+        "",
+    },
+
+    .dependencies = .{
+        .gremlin = .{
+            .url = "https://github.com/octopus-foundation/gremlin.zig/archive/refs/tags/v0.0.0.tar.gz",
+            .hash = "1220ebfa1ed08281f1b022ff5b5c90b11d3d9dd29e9975ec09a6ee691ae0ac2794fc",
+        },
+    },
+}
