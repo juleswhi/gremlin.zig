@@ -81,7 +81,7 @@ message User {
 }
 ```
 
-Gremlin will generate equivalent Zig code:
+Gremlin will generate equivalent Zig code (see [example.proto.zig](./example/src/gen/example.proto.zig)):
 ```zig
 const std = @import("std");
 const gremlin = @import("gremlin");
