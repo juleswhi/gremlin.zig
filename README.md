@@ -1,6 +1,6 @@
 # gremlin
 
-A zero-dependency Protocol Buffers implementation in pure Zig (no protoc required)
+A zero-dependency Google Protocol Buffers implementation in pure Zig (no protoc required)
 
 ## Installation & Setup
 
