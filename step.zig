@@ -55,9 +55,12 @@ fn make(step: *std.Build.Step, _: std.Build.Step.MakeOptions) !void {
     const target_path = try ps.gen_output.getPath3(b, step).toString(b.allocator);
     const build_path = b.build_root.path orelse @panic("build path unknown");
 
+    const proto_path_resolved = try std.Build.Cache.Directory.cwd().handle.realpathAlloc(b.allocator, proto_path);
+    defer b.allocator.free(proto_path_resolved);
+
     generateProtobuf(
         b.allocator,
-        proto_path,
+        proto_path_resolved,
         target_path,
         build_path,
     ) catch |err| {
