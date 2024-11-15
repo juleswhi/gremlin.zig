@@ -9,7 +9,7 @@
     .dependencies = .{
         .gremlin = .{
             .url = "https://github.com/octopus-foundation/gremlin.zig/archive/refs/tags/0.0.0.tar.gz",
-            .hash = "1220588d179a1af23ffc446cf56d1dcf9c2f43780dd3f3cc0c8e8e484dfd127a9f3b",
+            .hash = "1220a59f39767373cb41cd234679b99f92cbc0d55ade64cd01d3c8c1b90c1183fdaa",
         },
     },
 }
