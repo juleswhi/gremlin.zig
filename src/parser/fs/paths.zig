@@ -19,7 +19,7 @@ const std = @import("std");
 /// Returns an ArrayList containing the absolute paths to all found .proto files
 /// Caller owns the returned ArrayList and must call deinit() on it
 pub fn findProtoFiles(allocator: std.mem.Allocator, basePath: []const u8) !std.ArrayList([]const u8) {
-    var dir = try std.fs.cwd().openDir(basePath, .{});
+    var dir = try std.fs.cwd().openDir(basePath, .{ .iterate = true });
     defer dir.close();
 
     var walker = try dir.walk(allocator);
