@@ -206,7 +206,7 @@ pub const ZigRepeatableScalarField = struct {
             \\    try res.{s}.?.append(tag.wire);
             \\    if (tag.wire == gremlin.ProtoWireType.bytes) {{
             \\        const length_result = try buf.readVarInt(offset);
-            \\        offset += length_result.size + length_result.value;
+            \\        offset += length_result.size + @as(usize, @intCast(length_result.value));
             \\    }} else {{
             \\        const result = try buf.{s}(offset);
             \\        offset += result.size;
@@ -238,7 +238,7 @@ pub const ZigRepeatableScalarField = struct {
             \\            if (wire_type == .bytes) {{
             \\                const length_result = try self.buf.readVarInt(start_offset);
             \\                var offset = start_offset + length_result.size;
-            \\                const end_offset = offset + length_result.value;
+            \\                const end_offset = offset + @as(usize, @intCast(length_result.value));
             \\
             \\                while (offset < end_offset) {{
             \\                    const value_result = try self.buf.{s}(offset);
@@ -385,7 +385,7 @@ test "basic repeatable scalar field" {
         \\    try res._number_field_wires.?.append(tag.wire);
         \\    if (tag.wire == gremlin.ProtoWireType.bytes) {
         \\        const length_result = try buf.readVarInt(offset);
-        \\        offset += length_result.size + length_result.value;
+        \\        offset += length_result.size + @as(usize, @intCast(length_result.value));
         \\    } else {
         \\        const result = try buf.readInt32(offset);
         \\        offset += result.size;
@@ -408,7 +408,7 @@ test "basic repeatable scalar field" {
         \\            if (wire_type == .bytes) {
         \\                const length_result = try self.buf.readVarInt(start_offset);
         \\                var offset = start_offset + length_result.size;
-        \\                const end_offset = offset + length_result.value;
+        \\                const end_offset = offset + @as(usize, @intCast(length_result.value));
         \\
         \\                while (offset < end_offset) {
         \\                    const value_result = try self.buf.readInt32(offset);
