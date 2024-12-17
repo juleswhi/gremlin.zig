@@ -184,7 +184,13 @@ pub const ZigBytesField = struct {
             , .{ self.writer_field_name, d, self.wire_const_full_name, self.wire_const_full_name });
         } else {
             // Without default, include size if value exists
-            return std.fmt.allocPrint(self.allocator, "if (self.{s}) |v| {{ res += gremlin.sizes.sizeWireNumber({s}) + gremlin.sizes.sizeUsize(v.len) + v.len; }}", .{ self.writer_field_name, self.wire_const_full_name });
+            return std.fmt.allocPrint(self.allocator,
+                \\if (self.{s}) |v| {{
+                \\    if (v.len > 0) {{
+                \\        res += gremlin.sizes.sizeWireNumber({s}) + gremlin.sizes.sizeUsize(v.len) + v.len;
+                \\    }}
+                \\}}
+            , .{ self.writer_field_name, self.wire_const_full_name });
         }
     }
 
@@ -203,7 +209,13 @@ pub const ZigBytesField = struct {
             , .{ self.writer_field_name, d, self.wire_const_full_name, self.wire_const_full_name });
         } else {
             // Without default, write if value exists
-            return std.fmt.allocPrint(self.allocator, "if (self.{s}) |v| {{ target.appendBytes({s}, v); }}", .{ self.writer_field_name, self.wire_const_full_name });
+            return std.fmt.allocPrint(self.allocator,
+                \\if (self.{s}) |v| {{
+                \\    if (v.len > 0) {{
+                \\        target.appendBytes({s}, v);
+                \\    }}
+                \\}}
+            , .{ self.writer_field_name, self.wire_const_full_name });
         }
     }
 
@@ -282,12 +294,24 @@ test "basic bytes field" {
     // Test size check
     const size_check_code = try zig_field.createSizeCheck();
     defer std.testing.allocator.free(size_check_code);
-    try std.testing.expectEqualStrings("if (self.data_field) |v| { res += gremlin.sizes.sizeWireNumber(TestWire.DATA_FIELD_WIRE) + gremlin.sizes.sizeUsize(v.len) + v.len; }", size_check_code);
+    try std.testing.expectEqualStrings(
+        \\if (self.data_field) |v| {
+        \\    if (v.len > 0) {
+        \\        res += gremlin.sizes.sizeWireNumber(TestWire.DATA_FIELD_WIRE) + gremlin.sizes.sizeUsize(v.len) + v.len;
+        \\    }
+        \\}
+    , size_check_code);
 
     // Test writer
     const writer_code = try zig_field.createWriter();
     defer std.testing.allocator.free(writer_code);
-    try std.testing.expectEqualStrings("if (self.data_field) |v| { target.appendBytes(TestWire.DATA_FIELD_WIRE, v); }", writer_code);
+    try std.testing.expectEqualStrings(
+        \\if (self.data_field) |v| {
+        \\    if (v.len > 0) {
+        \\        target.appendBytes(TestWire.DATA_FIELD_WIRE, v);
+        \\    }
+        \\}
+    , writer_code);
 
     // Test reader field
     const reader_field_code = try zig_field.createReaderStructField();

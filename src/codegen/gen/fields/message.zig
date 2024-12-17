@@ -132,7 +132,9 @@ pub const ZigMessageField = struct {
         return std.fmt.allocPrint(self.allocator,
             \\if (self.{s}) |v| {{
             \\    const size = v.calcProtobufSize();
-            \\    res += gremlin.sizes.sizeWireNumber({s}) + gremlin.sizes.sizeUsize(size) + size;
+            \\    if (size > 0) {{
+            \\        res += gremlin.sizes.sizeWireNumber({s}) + gremlin.sizes.sizeUsize(size) + size;
+            \\    }}
             \\}}
         , .{ self.writer_field_name, self.wire_const_full_name });
     }
@@ -143,8 +145,10 @@ pub const ZigMessageField = struct {
         return std.fmt.allocPrint(self.allocator,
             \\if (self.{s}) |v| {{
             \\    const size = v.calcProtobufSize();
-            \\    target.appendBytesTag({s}, size);
-            \\    v.encodeTo(target);
+            \\    if (size > 0) {{
+            \\        target.appendBytesTag({s}, size);
+            \\        v.encodeTo(target);
+            \\    }}
             \\}}
         , .{ self.writer_field_name, self.wire_const_full_name });
     }
@@ -235,7 +239,9 @@ test "basic message field" {
     try std.testing.expectEqualStrings(
         \\if (self.message_field) |v| {
         \\    const size = v.calcProtobufSize();
-        \\    res += gremlin.sizes.sizeWireNumber(TestWire.MESSAGE_FIELD_WIRE) + gremlin.sizes.sizeUsize(size) + size;
+        \\    if (size > 0) {
+        \\        res += gremlin.sizes.sizeWireNumber(TestWire.MESSAGE_FIELD_WIRE) + gremlin.sizes.sizeUsize(size) + size;
+        \\    }
         \\}
     , size_check_code);
 
@@ -244,8 +250,10 @@ test "basic message field" {
     try std.testing.expectEqualStrings(
         \\if (self.message_field) |v| {
         \\    const size = v.calcProtobufSize();
-        \\    target.appendBytesTag(TestWire.MESSAGE_FIELD_WIRE, size);
-        \\    v.encodeTo(target);
+        \\    if (size > 0) {
+        \\        target.appendBytesTag(TestWire.MESSAGE_FIELD_WIRE, size);
+        \\        v.encodeTo(target);
+        \\    }
         \\}
     , writer_code);
 
