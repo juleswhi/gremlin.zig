@@ -143,7 +143,7 @@ pub const ScopedName = struct {
             }
 
             var parent = try p.clone();
-            const name = parent.pop();
+            const name = parent.pop().?;
             const full = try std.mem.join(self.allocator, ".", p.items);
 
             return ScopedName{
